@@ -11,7 +11,7 @@ type Comment = {
 }
 
 async function fetchPostData(
-  postId: number
+  postId: string
 ): Promise<{ post: Post; user: User; comments: Comment[] }> {
   const postResponse = await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
   const post = await postResponse.json()
@@ -27,7 +27,7 @@ async function fetchPostData(
   return { post, user, comments }
 }
 
-export default async function Page({ params }: { params: { postId: number } }) {
+export default async function Page({ params }: { params: { postId: string } }) {
   const { postId } = await params
   const { user, post, comments } = await fetchPostData(postId)
   return (
