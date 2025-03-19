@@ -1,4 +1,5 @@
 import { Post } from '@/app/page'
+import Image from 'next/image'
 import { Suspense } from 'react'
 
 type User = {
@@ -53,12 +54,24 @@ async function Comments({ id }: { id: string }) {
   const { comments } = await fetchComments(id)
   return comments.map(comment => (
     <li key={comment.id}>
-      <p>
-        Escrito por <strong>{comment.email}</strong>
-      </p>
-      <p>
-        <em>{comment.body}</em>
-      </p>
+      <div className="flex">
+        <div>
+          <Image
+            width={48}
+            height={48}
+            src={`https://api.dicebear.com/9.x/pixel-art/svg?seed=${comment.email}`}
+            alt={comment.email}
+          />
+        </div>
+        <div>
+          <p>
+            Escrito por <strong>{comment.email}</strong>
+          </p>
+          <p>
+            <em>{comment.body}</em>
+          </p>
+        </div>
+      </div>
     </li>
   ))
 }
