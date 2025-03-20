@@ -1,11 +1,13 @@
 import { Metadata } from 'next'
 import { ReactNode } from 'react'
+import { Counter } from './Counter'
 
 export const metadata: Metadata = { title: 'Pagina de post' }
 
 export default function LayoutPost({ children }: { children: ReactNode }) {
   return (
     <>
+      <Counter />
       {children}
       <footer>
         <hr />

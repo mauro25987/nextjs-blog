@@ -1,16 +1,7 @@
-import { Post } from '@/app/page'
-import Image from 'next/image'
+import Comments from '@/components/Comments'
+import Fallback from '@/components/Fallback'
+import { Post, User } from '@/types/types'
 import { Suspense } from 'react'
-
-type User = {
-  name: string
-  email: string
-}
-type Comment = {
-  id: number
-  email: string
-  body: string
-}
 
 async function fetchPostData(id: string): Promise<{ user: User; post: Post }> {
   const postResponse = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
@@ -20,13 +11,6 @@ async function fetchPostData(id: string): Promise<{ user: User; post: Post }> {
   const user = await userResponse.json()
 
   return { post, user }
-}
-
-async function fetchComments(id: string): Promise<{ comments: Comment[] }> {
-  await new Promise(resolve => setTimeout(resolve, 5000))
-  const commentsResponse = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}/comments`)
-  const comments = await commentsResponse.json()
-  return { comments }
 }
 
 export default async function PagePost({ params }: { params: Promise<{ id: string }> }) {
@@ -41,41 +25,9 @@ export default async function PagePost({ params }: { params: Promise<{ id: strin
       <p>{post.body}</p>
       <hr />
       <h3>Comentarios</h3>
-      <ul>
-        <Suspense fallback={<Loading />}>
-          <Comments id={id} />
-        </Suspense>
-      </ul>
+      <Suspense fallback={<Fallback />}>
+        <Comments id={id} />
+      </Suspense>
     </div>
   )
-}
-
-async function Comments({ id }: { id: string }) {
-  const { comments } = await fetchComments(id)
-  return comments.map(comment => (
-    <li key={comment.id}>
-      <div className="flex">
-        <div>
-          <Image
-            width={48}
-            height={48}
-            src={`https://api.dicebear.com/9.x/pixel-art/svg?seed=${comment.email}`}
-            alt={comment.email}
-          />
-        </div>
-        <div>
-          <p>
-            Escrito por <strong>{comment.email}</strong>
-          </p>
-          <p>
-            <em>{comment.body}</em>
-          </p>
-        </div>
-      </div>
-    </li>
-  ))
-}
-
-function Loading() {
-  return <div>Cargando los comentarios con fallback</div>
 }

@@ -1,11 +1,5 @@
+import { Post } from '@/types/types'
 import Link from 'next/link'
-
-export type Post = {
-  userId?: number
-  id: number
-  title: string
-  body?: string
-}
 
 async function fetchData(): Promise<Post[]> {
   await new Promise(resolve => setTimeout(resolve, 3000))
